@@ -76,14 +76,14 @@ const Proyectos = () => {
                         onClick={openModal}
                     >+</button>
                     {loading ? (
-                        <p>Cargando...</p>
+                        <p className='font-semibold text-lg'>Cargando...</p>
                     ) : (
                         proyectos && proyectos.length > 0 ? (
                             proyectos.map(({_id, titulo}, index) => (
                                 <CardProject key={_id} nombre={titulo} />
                             ))
                         ) : (
-                            <p>No hay proyectos disponibles.</p>
+                            <p className='font-semibold text-lg'>No hay proyectos disponibles.</p>
                         )
                     )}
                 </div>
