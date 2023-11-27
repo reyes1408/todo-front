@@ -1,7 +1,7 @@
 import React from "react";
-import NavBar from "../componentes/NavBar";
-import MenuList from "../componentes/MenuList";
-import HistorialComp from "../componentes/HistorialComp";
+import NavBar from "../components/NavBar";
+import MenuList from "../components/MenuList";
+import HistorialComp from "../components/HistorialComp";
 
 const Historial = () => {
   return (
@@ -10,13 +10,11 @@ const Historial = () => {
         <NavBar />
       </div>
 
-      <div class="flex">
-        <div>
-          <MenuList />
-        </div>
+      <div class="flex mt-8">
+        <MenuList />
 
-        <div class="w-auto">
-            <HistorialComp />
+        <div class="w-full pr-8">
+          <HistorialComp />
         </div>
       </div>
     </div>
