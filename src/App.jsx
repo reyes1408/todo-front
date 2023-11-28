@@ -8,14 +8,8 @@ import Proyectos from './pages/Proyectos';
 import ListaProyectos from './pages/listaProyectos';
 import OlvidarContraseña from './pages/OlvidarContraseña';
 import Registrar from './pages/Registrar';
-<<<<<<< Updated upstream
-import Perfil from './pages/Perfil';
-import Historial from './pages/Historial';
-import Calendario from './pages/Calendario';
-=======
 import Calendario from './pages/Calendario'
 import Historial from './pages/Historial'
->>>>>>> Stashed changes
 
 function App() {
 
@@ -29,14 +23,8 @@ function App() {
         <Route path='/proyectos/listaProyectos' element={<ListaProyectos />} />
         <Route path='/olvidar-contraseña' element={<OlvidarContraseña />} />
         <Route path='/registrar' element={<Registrar />} />
-<<<<<<< Updated upstream
-        <Route path="/perfil" element={<Perfil/>} />
-        <Route path="/historial" element={<Historial/>} />
-        <Route path="/calendario" element={<Calendario/>} />
-=======
         <Route path="/historial" element={<Historial />} />
         <Route path="/calendario" element={<Calendario />} />
->>>>>>> Stashed changes
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

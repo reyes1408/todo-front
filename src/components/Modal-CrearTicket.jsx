@@ -7,17 +7,28 @@ const Modal = ({ setIsOpen }) => {
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
     //const [fechaInicio, setFechaInicio] = useState('');
-    const [fecha, setFecha] = useState('');
+    const [colaboradores, setColaboradores] = useState([]);
     const [codigoProyecto, setCodigoProyecto] = useState();
 
     useEffect(() => {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = `${today.getMonth() + 1}`.padStart(2, '0'); // Agrega un 0 al mes si es necesario
-        const day = `${today.getDate()}`.padStart(2, '0'); // Agrega un 0 al día si es necesario
-        const fechaActual = `${year}-${month}-${day}`;
-        setFecha(fechaActual);
-        //setCodigoProyecto(generarCodigoAleatorio);
+        //alert('si')
+        setColaboradores(
+            [
+                {
+                    id: 1,
+                    nombre: "Daniel",
+                },
+                {
+                    id: 2,
+                    nombre: "Gabriel",
+                },
+                {
+                    id: 3,
+                    nombre: "Miguel",
+                },
+            ]
+        );
+        console.log
     }, []);
 
     const closeModal = () => {
@@ -28,13 +39,13 @@ const Modal = ({ setIsOpen }) => {
         try {
 
             const proyecto = {
-                id_responsable : "655e928bdaa3b43941adfa54",
-                titulo : titulo,
-                descripcion : descripcion,
-                fecha_inicio : ""
+                id_responsable: "654e943515d1df6f2634d77e",
+                titulo: titulo,
+                descripcion: descripcion,
+                fecha_inicio: ""
             }
 
-            //alert(JSON.stringify(proyecto));
+            alert(JSON.stringify(proyecto));
 
             const options = {
                 method: 'POST',
@@ -43,10 +54,10 @@ const Modal = ({ setIsOpen }) => {
                 },
                 body: JSON.stringify(proyecto)
             }
-            
+
             const data = await fetch('http://localhost:3000/api/project/register', options);
 
-            //alert(JSON.stringify(data.json()));
+            alert(JSON.stringify(data.json()));
             if (data.ok) {
                 alert('Se creo un nuevo proyecto')
             }
@@ -68,44 +79,31 @@ const Modal = ({ setIsOpen }) => {
                     X
                 </button>
                 <div className=' w-full mb-14 flex items-center justify-center'>
-                    <h1 className="text-2xl">Nuevo Proyecto</h1>
+                    <h1 className="text-2xl">Nuevo Ticket</h1>
                 </div>
 
                 <form onSubmit={enviarDatos}>
                     <input
                         type="text"
-                        className="w-full border border-gray-300 rounded p-2 text-sm outline-none mb-4"
+                        className="w-full border border-gray-300 rounded p-2 text-sm outline-none mb-4 focus:border-blue-500"
                         value={titulo}
                         onChange={(e) => setTitulo(e.target.value)}
-                        placeholder='Nombre de proyecto'
+                        placeholder='Nombre de ticket'
                         required
                     />
                     <textarea
-                        className="w-full border border-gray-300 rounded p-2 text-sm outline-none mb-4"
+                        className="w-full border border-gray-300 rounded p-2 text-sm outline-none mb-4 focus:border-blue-500"
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
-                        placeholder='Descripcion'
+                        placeholder='Descripción'
                     />
-                    <input
-                        type="date"
-                        className="w-full border border-gray-300 rounded p-2 text-sm outline-none mb-4"
-                        value={fecha}
-                        onChange={(e) => setFecha(e.target.value)}
-                        required
-                    />
-                    {/* <div className='flex mb-14'>
-                        <p className='text-sm mr-1'>Codigo de proyecto: </p>
-                        <p className='text-sm text-blue-800'>{codigoProyecto}</p>
-                        <button
-                            className='ml-20 rounded text-sm'
-                            onClick={
-                                copiarPortapapeles
-                            }
-                        >
-                            <img className='w-4' src={imgCopiar} alt="" />
-                        </button>
-                    </div> */}
-                    <p className='text-xs font-semibold'>*El código de acceso se genera una vez creado el proyecto</p>
+                    <select className="w-full text-sm inline-block py-2 rounded border border-gray-300 text-black outline-none focus:border-blue-500">
+                        {
+                            colaboradores.map((colaborador) => (
+                                <option id={colaborador.id} value="">{colaborador.nombre}</option>
+                            ))
+                        }
+                    </select>
                     <button
                         className="bg-blue-800 hover:bg-blue-700 text-white py-1 rounded w-full mt-12"
                     >

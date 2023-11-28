@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import terminado from '../assets/cheque.png'
 import copiar from '../assets/copia.png';
 
-const CardProject = ({ titulo, descripcion, clave, totalTickets, ticketsDone }) => {
+const CardProject = ({ titulo, clave, totalTickets, ticketsDone, ticketsCheck, }) => {
 
     const copiarPortapapeles = (e) => {
         e.preventDefault();
@@ -18,12 +18,26 @@ const CardProject = ({ titulo, descripcion, clave, totalTickets, ticketsDone }) 
     return (
         <button className='h-60 bg-slate-100 rounded-lg hover:shadow-md'>
             <Link to='/proyectos/listaProyectos'>
-                <div className='text-white w-full h-1/6 rounded-t-lg bg-lime-500 text-base font-semibold items-center justify-center flex'>
-                    <p>{titulo}</p>
+                <div className='text-white w-full h-1/6 rounded-t-lg bg-lime-500 text-base font-semibold '>
+                    <p className='flex items-center justify-center '>{titulo}</p>
                 </div>
                 <div className='h-4/6'>
                     {/* Aqui debe de ir las actividades hechas. */}
-                    {descripcion}
+                    {ticketsCheck && ticketsCheck.length > 0 ? (
+                        <>
+                            <p className='font-semibold'>En revision</p>
+                            <ul className=' flex-row items-start ml-2 overflow-y-auto h-32'>
+                                {ticketsCheck.map(({ _id, titulo, descripcion }) => (
+                                    <>
+                                        <li key={_id} className='text-xs'><p className='font-semibold flex items-start'>{titulo}</p>֎⸰{descripcion}</li>
+                                    </>
+                                ))}
+                            </ul>
+                        </>
+                    ) : (
+                        <p className='font-semibold'>Sin tickets</p>
+                    )}
+
                 </div>
                 <div className='h-1/6 border-t-2 border-gray-200 text-sm flex items-center px-3'>
                     <div className='w-2/3 flex'>

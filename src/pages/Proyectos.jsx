@@ -25,13 +25,14 @@ const Proyectos = () => {
                 },
                 body: JSON.stringify(
                     {
-                        id: "654e943515d1df6f2634d77e"
+                        id: "655e928bdaa3b43941adfa54" // 
                     }
                 )
             }
+
             const data = await fetch('http://localhost:3000/api/project/all', options);
             const datos = await data.json();
-            //console.log(JSON.stringify(data));
+            //console.log(JSON.stringify(datos));
             if (data.ok) {
                 //const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
                 setProyectos(datos);
@@ -81,8 +82,8 @@ const Proyectos = () => {
                         <p className='font-semibold text-lg'>Cargando...</p>
                     ) : (
                         proyectos && proyectos.length > 0 ? (
-                            proyectos.map(({ _id, titulo, descripcion, clave, totalTickets, ticketsDone }) => (
-                                <CardProject key={_id} titulo={titulo} descripcion={descripcion} clave={clave} totalTickets={totalTickets} ticketsDone={ticketsDone} />
+                            proyectos.map(({ _id, titulo, clave, totalTickets, ticketsDone, ticketsCheck }) => (
+                                <CardProject key={_id} titulo={titulo} ticketsCheck={ticketsCheck} clave={clave} totalTickets={totalTickets} ticketsDone={ticketsDone} />
                             ))
                         ) : (
                             <p className='font-semibold text-lg'>No hay proyectos disponibles.</p>
