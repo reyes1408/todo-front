@@ -1,7 +1,7 @@
 import React from "react";
-import NavBar from "../componentes/NavBar";
-import MenuList from "../componentes/MenuList";
-import CalendarioComp from "../componentes/CalendarioComp";
+import NavBar from "../components/NavBar";
+import MenuList from "../components/MenuList";
+import CalendarioComp from "../components/CalendarioComp";
 
 const Calendario = () => {
   return (
@@ -10,12 +10,10 @@ const Calendario = () => {
         <NavBar />
       </div>
 
-      <div class="flex">
-        <div>
+      <div class="flex mt-8 pr-8">
           <MenuList />
-        </div>
-
-        <div class="w-auto">
+        
+        <div class="w-full">
           <CalendarioComp />
         </div>
       </div>

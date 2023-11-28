@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import NavProyectos from './NavProyectos';
+import React, { useEffect } from 'react';
+import NavProyectos from '../components/NavProyectos';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -14,34 +14,41 @@ const CalendarioComp = () => {
 
   return (
     <div>
-        <div>
-            <NavProyectos />
-        </div>
-
-        <div className="justify-center uppercase">
-        <FullCalendar
+      <div>
+        <NavProyectos />
+      </div>
+  
+      <div className="lg:pl-7 lg:flex lg:justify-center uppercase">
+        <div className="lg:w-full xl:w-full">
+          <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView={"dayGridMonth"}
-            dayHeaderFormat={{ weekday: 'long', omitCommas: true, omitSuffix: true, }}
-            dayHeaderContent={(args) => args.text.toUpperCase()} //Para poner mayuscula los dias
+            dayHeaderFormat={{
+              dayPopoverFormat: { month: 'long', day: 'numeric', year: 'numeric' },
+              weekday: 'long',
+              omitCommas: true,
+              omitSuffix: true,
+            }}
+            dayHeaderContent={(args) => args.text.toUpperCase()}
+            dayPopoverFormat={{ month: 'long', day: 'numeric', year: 'numeric' }}
             headerToolbar={{
-                start: "today prev,next",
-                center: "title",
-                end: "dayGridMonth,timeGridWeek,timeGridDay",
+              start: "prev,next",
+              center: "title",
+              end: "",
             }}
             locale="es"
-            height={"72vh"} //Tamaño del calendario
-            //weekends={false}  //Ocultar los fines de semana
+            height={"76vh"}
             events={[
-                { title: 'event 1', date: '2023-11-16' },
-                { title: 'event 2', date: '2023-11-16' },
-                { title: 'event 3', date: '2023-11-16' },
-                { title: 'event 4', date: '2023-11-16' }
+              { title: 'Creación de Login - Miguel (Con M de Master)', start: '2023-11-18', end: '2023-11-21', color: '#FA84D9', textColor: '#202124' },
+              { title: 'Creación de APIs - Gabriel', start: '2023-11-18', end: '2023-11-23', color: '#FFBD70', textColor: '#202124' },
+              { title: 'Crecion de modulo registro - Jordi', start: '2023-11-19', end: '2023-11-25', color: '#AFFF70', textColor: '#202124' },
             ]}
-        />
+          />
         </div>
+      </div>
     </div>
   );
+  
 };
 
 export default CalendarioComp;
