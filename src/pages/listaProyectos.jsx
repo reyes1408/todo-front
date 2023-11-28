@@ -5,44 +5,39 @@ import MenuList from '../components/MenuList';
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
+import dialog from '../assets/charla.png'
+import clip from '../assets/clip-de-papel.png'
+
 const initialData = {
     containers: {
         'container-1': {
             title: 'Por hacer',
-            items: ['item-1', 'item-2', 'item-3', 'item-4', 'item-5', 'item-6', 'item-7', 'item-8', 'item-9', 'item-10', 'item-11', 'item-12', 'item-13', 'item-14', 'item-15', 'item-16', 'item-17', 'item-18',],
+            items: ['Ticket #3', 'Ticket #4', 'Ticket #5', 'Ticket #7', 'Ticket #8', 'Ticket #10',],
         },
         'container-2': {
             title: 'Haciendo',
-            items: [],
+            items: ['Ticket #9',],
         },
         'container-3': {
             title: 'En revisión',
-            items: [],
+            items: ['Ticket #6'],
         },
         'container-4': {
             title: 'Hecho',
-            items: [],
+            items: ['Ticket #1', 'Ticket #2'],
         },
     },
     items: {
-        'item-1': { id: 'item-1', content: 'Ticket 1' },
-        'item-2': { id: 'item-2', content: 'Ticket 2' },
-        'item-3': { id: 'item-3', content: 'Ticket 3' },
-        'item-4': { id: 'item-4', content: 'Ticket 4' },
-        'item-5': { id: 'item-5', content: 'Ticket 5' },
-        'item-6': { id: 'item-6', content: 'Ticket 6' },
-        'item-7': { id: 'item-7', content: 'Ticket 7' },
-        'item-8': { id: 'item-8', content: 'Ticket 8' },
-        'item-9': { id: 'item-9', content: 'Ticket 9' },
-        'item-10': { id: 'item-10', content: 'Ticket 10' },
-        'item-11': { id: 'item-11', content: 'Ticket 11' },
-        'item-12': { id: 'item-12', content: 'Ticket 12' },
-        'item-13': { id: 'item-13', content: 'Ticket 13' },
-        'item-14': { id: 'item-14', content: 'Ticket 14' },
-        'item-15': { id: 'item-15', content: 'Ticket 15' },
-        'item-16': { id: 'item-16', content: 'Ticket 16' },
-        'item-17': { id: 'item-17', content: 'Ticket 17' },
-        'item-18': { id: 'item-18', content: 'Ticket 18' },
+        'Ticket #1': { id: 'Ticket #1', titulo: 'Creación de módulo Login', descripción: "Descripción de proyecto" },
+        'Ticket #2': { id: 'Ticket #2', titulo: 'Creación de módulo Menú', descripción: "Descripción de proyecto" },
+        'Ticket #3': { id: 'Ticket #3', titulo: 'Creación de módulo Proyectos', descripción: "Descripción de proyecto" },
+        'Ticket #4': { id: 'Ticket #4', titulo: 'Creación de módulo Ticket', descripción: "Descripción de proyecto" },
+        'Ticket #5': { id: 'Ticket #5', titulo: 'Creación de módulo Chat de tickets', descripción: "Descripción de proyecto" },
+        'Ticket #6': { id: 'Ticket #6', titulo: 'Creación de módulo Calendario', descripción: "Descripción de proyecto" },
+        'Ticket #7': { id: 'Ticket #7', titulo: 'Creación de módulo Historial', descripción: "Descripción de proyecto" },
+        'Ticket #8': { id: 'Ticket #8', titulo: 'Creación de módulo Usuario', descripción: "Descripción de proyecto" },
+        'Ticket #9': { id: 'Ticket #9', titulo: 'Creación de APIs', descripción: "Descripción de proyecto" },
+        'Ticket #10': { id: 'Ticket #10', titulo: 'Pruebas consumiendo APIs', descripción: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, quas? Quis nesciunt ratione nostrum, nisi unde totam reiciendis asperiores labore, at porro dolore minus nobis voluptates amet delectus ad dicta." },
     },
 };
 
@@ -75,26 +70,38 @@ function listaProyectos() {
 
     return (
         <>
-        <NavBar />
+            <NavBar />
             <div className='flex mt-8 pr-8'>
                 <MenuList />
                 <div className="w-5/6 flex justify-center space-x-12">
                     <DragDropContext onDragEnd={onDragEnd}>
-                        {Object.keys(data.containers).map((containerId) => {
+                        {Object.keys(data.containers).map((containerId, i) => {
                             const container = data.containers[containerId];
                             const items = container.items.map((itemId) => data.items[itemId]);
 
                             return (
-                                <div key={containerId} className="w-1/4 border-2 p-4 rounded-lg overflow-y-auto"
+                                <div key={containerId} className="w-1/4 border-2 border-gray-400 p-2 rounded-lg bg-gray-100"
                                     style={{ maxHeight: "84vh" }}>
-                                    <h2 className="text-lg font-bold">{container.title}</h2>
-                                    <div>
-                                        <Droppable droppableId={containerId} key={containerId} className="h-10">
+                                    <div className='flex items-center'>
+                                        {i != 0 ? (
+                                            <h2 className="text-lg w-full text-center font-bold">{container.title}</h2>
+                                        ) : (
+                                            <>
+                                                <h2 className="text-lg w-full text-center font-bold">{container.title}</h2>
+                                                <button className='w-7 h-6 bg-gray-400 rounded-full text-xl font-bold flex items-center justify-center pb-1 mr-1 hover:bg-blue-700 hover:text-white'>
+                                                    +
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className=''>
+                                        <Droppable droppableId={containerId} key={containerId} className="w-full" >
                                             {(provided) => (
                                                 <ul
                                                     ref={provided.innerRef}
                                                     {...provided.droppableProps}
-                                                    className="mt-4 space-y-2"
+                                                    className="mt-4 space-y-2 overflow-y-auto"
+                                                     style={{ maxHeight: "72vh", height: "72vh" }}
                                                 >
                                                     {items.map((item, index) => (
                                                         <Draggable
@@ -107,9 +114,26 @@ function listaProyectos() {
                                                                     ref={provided.innerRef}
                                                                     {...provided.draggableProps}
                                                                     {...provided.dragHandleProps}
-                                                                    className="bg-blue-200 p-2 rounded cursor-pointer"
+                                                                    className="bg-white p-2 rounded cursor-pointer shadow-md hover:shadow-xl"
                                                                 >
-                                                                    {item.content}
+                                                                    <p className='text-sm font-semibold text-center mb-2'>
+                                                                        {item.id}
+                                                                    </p>
+                                                                    <p className='text-xs font-semibold mb-2'>
+                                                                        {item.titulo}
+                                                                    </p>
+                                                                    <p className='text-xs'>
+                                                                        {item.descripción}
+                                                                    </p>
+                                                                    <div className='w-full h-5 mt-4'>
+                                                                        <div className='flex items-center'>
+                                                                            <img className='h-5' src={dialog} alt="" />
+                                                                            <img className='h-5' src={clip} alt="" />
+                                                                        </div>
+                                                                        <div>
+                                                                            <img src="" alt="" />
+                                                                        </div>
+                                                                    </div>
                                                                 </li>
                                                             )}
                                                         </Draggable>
