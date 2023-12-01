@@ -11,7 +11,7 @@ const Modal = ({ setIsOpen }) => {
     const [codigoProyecto, setCodigoProyecto] = useState();
 
     useEffect(() => {
-        //alert('si')
+        
         setColaboradores(
             [
                 {
