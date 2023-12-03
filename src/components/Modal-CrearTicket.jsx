@@ -1,35 +1,49 @@
 import React, { useState, useEffect } from 'react';
 
-import imgCopiar from '../assets/copia.png'
-
 const Modal = ({ setIsOpen }) => {
 
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    //const [fechaInicio, setFechaInicio] = useState('');
+    const [selectedColaborador, setSelectedColaborador] = useState('');
     const [colaboradores, setColaboradores] = useState([]);
-    const [codigoProyecto, setCodigoProyecto] = useState();
-
+    
     useEffect(() => {
-        
-        setColaboradores(
-            [
-                {
-                    id: 1,
-                    nombre: "Daniel",
-                },
-                {
-                    id: 2,
-                    nombre: "Gabriel",
-                },
-                {
-                    id: 3,
-                    nombre: "Miguel",
-                },
-            ]
-        );
-        console.log
+        const fetchData = async () => {
+            try {
+                await getColab();
+            } catch (error) {
+                console.error('Error en useEffect:', error);
+            }
+        };
+        fetchData();
     }, []);
+
+    const getColab = async () => {
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: "6565b24744550649e952be8c" //id del proyecto
+        }),
+    };
+
+    try {
+        const data = await fetch('http://localhost:3000/api/project/colab/all', options);
+        
+        if (data.ok) {
+            const datos = await data.json();
+            setColaboradores(datos);
+            console.log(colaboradores);
+        }else {
+            console.error('Error en la respuesta del servidor:', data.status, data.statusText);
+        }
+    } catch (error) {
+        //console.error('Error en getColab:', error);
+    }
+};
+
 
     const closeModal = () => {
         setIsOpen(false);
@@ -37,15 +51,12 @@ const Modal = ({ setIsOpen }) => {
 
     const enviarDatos = async () => {
         try {
-
             const proyecto = {
-                id_responsable: "654e943515d1df6f2634d77e",
+                id_responsable: selectedColaborador,
                 titulo: titulo,
                 descripcion: descripcion,
                 fecha_inicio: ""
             }
-
-            alert(JSON.stringify(proyecto));
 
             const options = {
                 method: 'POST',
@@ -55,11 +66,13 @@ const Modal = ({ setIsOpen }) => {
                 body: JSON.stringify(proyecto)
             }
 
-            const data = await fetch('http://localhost:3000/api/project/register', options);
+            const id = "6565b24744550649e952be8c"
+
+            const data = await fetch('http://localhost:3000/api/ticket/register/6565b24744550649e952be8c', options);
 
             alert(JSON.stringify(data.json()));
             if (data.ok) {
-                alert('Se creo un nuevo proyecto')
+                alert('Se creo un nuevo ticket')
             }
 
             closeModal();
@@ -97,13 +110,32 @@ const Modal = ({ setIsOpen }) => {
                         onChange={(e) => setDescripcion(e.target.value)}
                         placeholder='Descripción'
                     />
-                    <select className="w-full text-sm inline-block py-2 rounded border border-gray-300 text-black outline-none focus:border-blue-500">
-                        {
-                            colaboradores.map((colaborador) => (
-                                <option id={colaborador.id} value="">{colaborador.nombre}</option>
+                    <select
+                        className="w-full text-sm inline-block py-2 rounded border border-gray-300 text-black outline-none focus:border-blue-500"
+                        value={selectedColaborador}
+                        onChange={(e) => setSelectedColaborador(e.target.value)}
+                    >
+                        {colaboradores.length > 0 ? (
+                            colaboradores.map((c) => (
+
+                                <option key={c.colaborador._id} value={c.colaborador._id}>
+                                    {c.colaborador.nombre}
+                                </option>
                             ))
-                        }
+                        ) : (
+                            <option value="" disabled>
+                                Cargando colaboradores...
+                            </option>
+                        )}
                     </select>
+
+                    {/* <select className="w-full text-sm inline-block py-2 rounded border border-gray-300 text-black outline-none focus:border-blue-500" >
+                        {
+                            /*colaboradores.map((colaborador) => (
+                                <option key={colaborador._id}  value={colaborador._id}>{colaborador.nombre}</option>
+                            ))*
+                        }
+                    </select> */}
                     <button
                         className="bg-blue-800 hover:bg-blue-700 text-white py-1 rounded w-full mt-12"
                     >

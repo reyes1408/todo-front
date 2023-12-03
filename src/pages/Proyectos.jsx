@@ -31,10 +31,9 @@ const Proyectos = () => {
             }
 
             const data = await fetch('http://localhost:3000/api/project/all', options);
-            const datos = await data.json();
             //console.log(JSON.stringify(datos));
             if (data.ok) {
-                //const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
+                const datos = await data.json();
                 setProyectos(datos);
             }
 
@@ -50,6 +49,7 @@ const Proyectos = () => {
         const fetchData = async () => {
             try {
                 await obtenerProyectos();
+                console.log('proyectsosssss');
             } catch (error) {
                 console.error('Error en useEffect:', error);
             }

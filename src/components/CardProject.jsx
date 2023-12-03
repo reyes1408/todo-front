@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import terminado from '../assets/cheque.png'
-import copiar from '../assets/copia.png';
+//import copiar from '../assets/copia.png';
 
 const CardProject = ({ titulo, clave, totalTickets, ticketsDone, ticketsCheck, }) => {
 
@@ -9,15 +9,14 @@ const CardProject = ({ titulo, clave, totalTickets, ticketsDone, ticketsCheck, }
         e.preventDefault();
         navigator.clipboard.writeText(clave)
             .then(() => {
-                console.log('texto copiado.');
+                console.log('Texto copiado');
             }).catch(err => {
                 console.error('Error al copiar: ', err);
             })
     }
 
     return (
-        <button className='h-60 bg-slate-100 rounded-lg hover:shadow-md'>
-            <Link to='/proyectos/listaProyectos'>
+            <Link to='/proyectos/listaProyectos' className='h-60 bg-slate-100 rounded-lg hover:shadow-md'>
                 <div className='text-white w-full h-1/6 rounded-t-lg bg-lime-500 text-base font-semibold '>
                     <p className='flex items-center justify-center '>{titulo}</p>
                 </div>
@@ -25,17 +24,19 @@ const CardProject = ({ titulo, clave, totalTickets, ticketsDone, ticketsCheck, }
                     {/* Aqui debe de ir las actividades hechas. */}
                     {ticketsCheck && ticketsCheck.length > 0 ? (
                         <>
-                            <p className='font-semibold'>En revision</p>
+                            <p className='font-semibold ml-1'>En revision</p>
                             <ul className=' flex-row items-start ml-2 overflow-y-auto h-32'>
                                 {ticketsCheck.map(({ _id, titulo, descripcion }) => (
-                                    <>
-                                        <li key={_id} className='text-xs'><p className='font-semibold flex items-start'>{titulo}</p>֎⸰{descripcion}</li>
-                                    </>
+              
+                                    <li key={_id} className='text-xs'>
+                                        <p className='font-semibold flex items-start'>&#8227; {titulo}</p>
+                                        {descripcion}
+                                    </li>
                                 ))}
                             </ul>
                         </>
                     ) : (
-                        <p className='font-semibold'>Sin tickets</p>
+                        <p className='font-semibold ml-2'>Sin tickets</p>
                     )}
 
                 </div>
@@ -53,8 +54,7 @@ const CardProject = ({ titulo, clave, totalTickets, ticketsDone, ticketsCheck, }
                     </button>
                 </div>
             </Link>
-        </button>
-    )
+        )
 }
 
 export default CardProject

@@ -1,47 +1,149 @@
 import NavBar from '../components/NavBar';
 import MenuList from '../components/MenuList';
+import Modal from '../components/Modal-CrearTicket'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import dialog from '../assets/charla.png'
 import clip from '../assets/clip-de-papel.png'
 
-const initialData = {
-    containers: {
-        'container-1': {
-            title: 'Por hacer',
-            items: ['Ticket #3', 'Ticket #4', 'Ticket #5', 'Ticket #7', 'Ticket #8', 'Ticket #10',],
-        },
-        'container-2': {
-            title: 'Haciendo',
-            items: ['Ticket #9',],
-        },
-        'container-3': {
-            title: 'En revisión',
-            items: ['Ticket #6'],
-        },
-        'container-4': {
-            title: 'Hecho',
-            items: ['Ticket #1', 'Ticket #2'],
-        },
-    },
-    items: {
-        'Ticket #1': { id: 'Ticket #1', titulo: 'Creación de módulo Login', descripción: "Descripción de proyecto" },
-        'Ticket #2': { id: 'Ticket #2', titulo: 'Creación de módulo Menú', descripción: "Descripción de proyecto" },
-        'Ticket #3': { id: 'Ticket #3', titulo: 'Creación de módulo Proyectos', descripción: "Descripción de proyecto" },
-        'Ticket #4': { id: 'Ticket #4', titulo: 'Creación de módulo Ticket', descripción: "Descripción de proyecto" },
-        'Ticket #5': { id: 'Ticket #5', titulo: 'Creación de módulo Chat de tickets', descripción: "Descripción de proyecto" },
-        'Ticket #6': { id: 'Ticket #6', titulo: 'Creación de módulo Calendario', descripción: "Descripción de proyecto" },
-        'Ticket #7': { id: 'Ticket #7', titulo: 'Creación de módulo Historial', descripción: "Descripción de proyecto" },
-        'Ticket #8': { id: 'Ticket #8', titulo: 'Creación de módulo Usuario', descripción: "Descripción de proyecto" },
-        'Ticket #9': { id: 'Ticket #9', titulo: 'Creación de APIs', descripción: "Descripción de proyecto" },
-        'Ticket #10': { id: 'Ticket #10', titulo: 'Pruebas consumiendo APIs', descripción: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, quas? Quis nesciunt ratione nostrum, nisi unde totam reiciendis asperiores labore, at porro dolore minus nobis voluptates amet delectus ad dicta." },
-    },
-};
-
 function listaProyectos() {
-    const [data, setData] = useState(initialData);
+    
+    const obtenerTickets = async () => {
+        try {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(
+                    {
+                        id: "6565b24744550649e952be8c" //id del proyecto
+                    }
+                )
+            }
+
+            const datos = await fetch('http://localhost:3000/api/project/ticket/find', options);
+            const datoss = await datos.json();
+
+            if (datos.ok) {
+                //const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
+                console.log(datoss);
+                setData(datoss);
+            }
+
+        } catch (error) {
+            console.error('Error al obtener las tareas:', error);
+        }
+    };
+
+    useEffect(() => {
+        //fetch para rellenar los contenedores con los tickets de la base de datos.
+        const fetchData = async () => {
+            try {
+                await obtenerTickets();
+            } catch (error) {
+                console.error('Error en useEffect:', error);
+            }
+        };
+
+        // console.log(initialData);
+
+        fetchData();
+
+    }, [])
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    const [data, setData] = useState({
+
+        "containers": {
+            "container-1": {
+                "title": "Por hacer",
+                "items": []
+            },
+            "container-2": {
+                "title": "Haciendo",
+                "items": []
+            },
+            "container-3": {
+                "title": "En revisión",
+                "items": []
+            },
+            "container-4": {
+                "title": "Hecho",
+                "items": []
+            }
+        },
+        "items": {
+
+        }
+    });
+
+    var lastcontainer = '';
+
+    const updateEstatusTicket = async (idticket, estatus) => {
+
+        
+        if (lastcontainer == estatus) {
+            return;
+        }
+        let st = '';
+        switch (estatus) {
+            case 'Por hacer':
+                
+                st = 'todo';
+                break;
+            case 'Haciendo':
+                
+                st ='doing'
+                break;
+            case 'En revisión':
+                
+                st = 'check';
+                break;
+            case 'Hecho':
+                
+                st ='done';
+                break;
+        
+            default:
+                alert('Algo salio mal');
+                break;
+        }
+        //alert(st);
+        lastcontainer= estatus; // verifica el estatus si no es repetido
+
+        try {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(
+                    {
+                        id_ticket: idticket,
+                        estatus: st,
+                    }
+                )
+            }
+
+            const datos = await fetch('http://localhost:3000/api/ticket/update', options);
+            
+            if (datos.ok) {
+               //const datoss = await datos.json();
+                console.log('estatus actualizado');
+            }
+
+        } catch (error) {
+            console.error('Error al obtener las tareas:', error);
+        }
+    }
 
     const onDragEnd = (result) => {
         if (!result.destination) {
@@ -65,10 +167,17 @@ function listaProyectos() {
 
         // Actualiza el estado de datos
         setData({ ...data });
+        updateEstatusTicket(draggedItemId, destinationContainer.title);
+        //Aquí debemos hacer el fetch 
+        //cambiar el nombre de los contenedores para que coincida con los estados
+        //O podríamos hacer condicionales con el nombre de los componentes
     };
 
     return (
         <>
+            {
+                isOpen && (<Modal setIsOpen={setIsOpen} />)
+            }
             <NavBar />
             <div className='flex mt-8 pr-8'>
                 <MenuList />
@@ -87,7 +196,10 @@ function listaProyectos() {
                                         ) : (
                                             <>
                                                 <h2 className="text-lg w-full text-center font-bold">{container.title}</h2>
-                                                <button className='w-7 h-6 bg-gray-400 rounded-full text-xl font-bold flex items-center justify-center pb-1 mr-1 hover:bg-blue-700 hover:text-white'>
+                                                <button
+                                                    className='w-7 h-6 bg-gray-400 rounded-full text-xl font-bold flex items-center justify-center pb-1 mr-1 hover:bg-blue-700 hover:text-white'
+                                                    onClick={openModal}
+                                                >
                                                     +
                                                 </button>
                                             </>
@@ -100,9 +212,9 @@ function listaProyectos() {
                                                     ref={provided.innerRef}
                                                     {...provided.droppableProps}
                                                     className="mt-4 space-y-2 overflow-y-auto"
-                                                     style={{ maxHeight: "72vh", height: "72vh" }}
+                                                    style={{ maxHeight: "72vh", height: "72vh" }}
                                                 >
-                                                    {items.map((item, index) => (
+                                                    {items ? (items.map((item, index) => (
                                                         <Draggable
                                                             key={item.id}
                                                             draggableId={item.id}
@@ -116,13 +228,13 @@ function listaProyectos() {
                                                                     className="bg-white p-2 rounded cursor-pointer shadow-md hover:shadow-xl"
                                                                 >
                                                                     <p className='text-sm font-semibold text-center mb-2'>
-                                                                        {item.id}
+                                                                        Ticket #{index}
                                                                     </p>
                                                                     <p className='text-xs font-semibold mb-2'>
                                                                         {item.titulo}
                                                                     </p>
                                                                     <p className='text-xs'>
-                                                                        {item.descripción}
+                                                                        {item.descripcion}
                                                                     </p>
                                                                     <div className='w-full h-5 mt-4'>
                                                                         <div className='flex items-center'>
@@ -136,7 +248,8 @@ function listaProyectos() {
                                                                 </li>
                                                             )}
                                                         </Draggable>
-                                                    ))}
+                                                    ))) : (<p>Sin tickets</p>)
+                                                    }
                                                     {provided.placeholder}
                                                 </ul>
                                             )}
