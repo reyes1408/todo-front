@@ -48,10 +48,7 @@ function listaProyectos() {
             }
         };
 
-        // console.log(initialData);
-
         fetchData();
-
     }, [])
 
     const [isOpen, setIsOpen] = useState(false);
@@ -88,7 +85,6 @@ function listaProyectos() {
     var lastcontainer = '';
 
     const updateEstatusTicket = async (idticket, estatus) => {
-
         
         if (lastcontainer == estatus) {
             return;
@@ -116,7 +112,7 @@ function listaProyectos() {
                 alert('Algo salio mal');
                 break;
         }
-        //alert(st);
+        
         lastcontainer= estatus; // verifica el estatus si no es repetido
 
         try {
@@ -168,9 +164,6 @@ function listaProyectos() {
         // Actualiza el estado de datos
         setData({ ...data });
         updateEstatusTicket(draggedItemId, destinationContainer.title);
-        //Aquí debemos hacer el fetch 
-        //cambiar el nombre de los contenedores para que coincida con los estados
-        //O podríamos hacer condicionales con el nombre de los componentes
     };
 
     return (
