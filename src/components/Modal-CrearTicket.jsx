@@ -77,7 +77,7 @@ const Modal = ({ setIsOpen }) => {
 
             closeModal();
         } catch (error) {
-            alert('Error al crear el proyecto')
+            alert('Error al crear el ticket')
             console.log(error)
         }
     }
