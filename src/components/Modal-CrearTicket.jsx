@@ -6,56 +6,50 @@ const Modal = ({ setIsOpen }) => {
     const [descripcion, setDescripcion] = useState('');
     const [selectedColaborador, setSelectedColaborador] = useState('');
     const [colaboradores, setColaboradores] = useState([]);
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await getColab();
-            } catch (error) {
-                console.error('Error en useEffect:', error);
-            }
-        };
-        fetchData();
-    }, []);
-
-    const getColab = async () => {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            id: "6565b24744550649e952be8c" //id del proyecto
-        }),
-    };
-
-    try {
-        const data = await fetch('http://localhost:3000/api/project/colab/all', options);
-        
-        if (data.ok) {
-            const datos = await data.json();
-            setColaboradores(datos);
-            console.log(colaboradores);
-        }else {
-            console.error('Error en la respuesta del servidor:', data.status, data.statusText);
-        }
-    } catch (error) {
-        //console.error('Error en getColab:', error);
-    }
-};
-
 
     const closeModal = () => {
         setIsOpen(false);
     };
+    
+    const getColab = async () => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: "6565b24744550649e952be8c" //id del proyecto
+            }),
+        };
 
-    const enviarDatos = async () => {
+        try {
+            const data = await fetch('http://localhost:3000/api/project/colab/all', options);
+            
+            if (data.ok) {
+                const datos = await data.json();
+                setColaboradores(datos);
+                
+            }else {
+                console.error('Error en la respuesta del servidor:', data.status, data.statusText);
+            }
+        } catch (error) {
+            console.error('Error en getColab:', error);
+        }
+    };
+
+    const enviarDatos = async ( event ) => {
+        event.preventDefault();
+        
+        if (selectedColaborador == '') {
+            alert('Seleccione a un colaborador');
+            return;
+        }
+
         try {
             const proyecto = {
                 id_responsable: selectedColaborador,
                 titulo: titulo,
                 descripcion: descripcion,
-                fecha_inicio: ""
             }
 
             const options = {
@@ -66,21 +60,31 @@ const Modal = ({ setIsOpen }) => {
                 body: JSON.stringify(proyecto)
             }
 
-            const id = "6565b24744550649e952be8c"
+            //const id = "6565b24744550649e952be8c"
 
             const data = await fetch('http://localhost:3000/api/ticket/register/6565b24744550649e952be8c', options);
 
-            alert(JSON.stringify(data.json()));
+            //alert(JSON.stringify(data.json()));
             if (data.ok) {
                 alert('Se creo un nuevo ticket')
+                closeModal();
             }
-
-            closeModal();
         } catch (error) {
             alert('Error al crear el proyecto')
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await getColab();
+            } catch (error) {
+                console.error('Error en useEffect:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black">
@@ -112,9 +116,13 @@ const Modal = ({ setIsOpen }) => {
                     />
                     <select
                         className="w-full text-sm inline-block py-2 rounded border border-gray-300 text-black outline-none focus:border-blue-500"
+                        placeholder={'Selecciona un colaborador'}
                         value={selectedColaborador}
                         onChange={(e) => setSelectedColaborador(e.target.value)}
                     >
+                        <option value="" disabled>
+                            Selecciona un colaborador
+                        </option>
                         {colaboradores.length > 0 ? (
                             colaboradores.map((c) => (
 
@@ -129,13 +137,6 @@ const Modal = ({ setIsOpen }) => {
                         )}
                     </select>
 
-                    {/* <select className="w-full text-sm inline-block py-2 rounded border border-gray-300 text-black outline-none focus:border-blue-500" >
-                        {
-                            /*colaboradores.map((colaborador) => (
-                                <option key={colaborador._id}  value={colaborador._id}>{colaborador.nombre}</option>
-                            ))*
-                        }
-                    </select> */}
                     <button
                         className="bg-blue-800 hover:bg-blue-700 text-white py-1 rounded w-full mt-12"
                     >

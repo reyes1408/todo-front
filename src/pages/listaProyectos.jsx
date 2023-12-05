@@ -142,6 +142,7 @@ function listaProyectos() {
     }
 
     const onDragEnd = (result) => {
+        
         if (!result.destination) {
             return;
         }
@@ -219,6 +220,7 @@ function listaProyectos() {
                                                                     {...provided.draggableProps}
                                                                     {...provided.dragHandleProps}
                                                                     className="bg-white p-2 rounded cursor-pointer shadow-md hover:shadow-xl"
+                                                                    onDoubleClick={() => alert(JSON.stringify(item))  }
                                                                 >
                                                                     <p className='text-sm font-semibold text-center mb-2'>
                                                                         Ticket #{index}
