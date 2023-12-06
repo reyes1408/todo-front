@@ -142,7 +142,7 @@ function listaProyectos() {
     }
 
     const onDragEnd = (result) => {
-        
+
         if (!result.destination) {
             return;
         }
@@ -150,7 +150,7 @@ function listaProyectos() {
         const sourceContainer = data.containers[result.source.droppableId];
         const destinationContainer = data.containers[result.destination.droppableId];
         const draggedItemId = result.draggableId;
-
+        
         // Obtén los objetos de los elementos arrastrados y soltados
         const draggedItem = data.items[draggedItemId];
         const sourceIndex = result.source.index;

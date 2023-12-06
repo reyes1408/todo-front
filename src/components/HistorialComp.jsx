@@ -1,9 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import NavProyectos from './NavProyectos';
-import colaboradoresJ from '../assets/colaboradoresJ.png';
-import colaboradoresG from '../assets/colaboradoresG.png';
-import colaboradoresM from '../assets/colaboradoresM.png';
 
 import {
     List,
@@ -35,7 +32,7 @@ const HistorialComp = () => {
 
             if (datos.ok) {
                 const datoss = await datos.json();
-                console.log(datoss);
+                //console.log(datoss);
                 setData(datoss);
             }
 
