@@ -10,6 +10,7 @@ import OlvidarContraseña from './pages/OlvidarContraseña';
 import Registrar from './pages/Registrar';
 import Calendario from './pages/Calendario'
 import Historial from './pages/Historial'
+import Chat from './components/Chat'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='/registrar' element={<Registrar />} />
         <Route path="/historial" element={<Historial />} />
         <Route path="/calendario" element={<Calendario />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

@@ -1,15 +1,17 @@
 import NavBar from '../components/NavBar';
 import MenuList from '../components/MenuList';
 import Modal from '../components/Modal-CrearTicket'
+import BotonFlotante from '../components/botonFlotante';
 
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import dialog from '../assets/charla.png'
 import clip from '../assets/clip-de-papel.png'
+import Chat from '../components/Chat';
 
 function listaProyectos() {
-    
+
     const obtenerTickets = async () => {
         try {
             const options = {
@@ -51,10 +53,16 @@ function listaProyectos() {
         fetchData();
     }, [])
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenTicket, setIsOpenTicket] = useState(false);
 
-    const openModal = () => {
-        setIsOpen(true);
+    const openModalTicket = () => {
+        setIsOpenTicket(true);
+    };
+
+    const [isOpenChat, setIsOpenChat] = useState(false);
+
+    const openModalChat = () => {
+        setIsOpenChat(true);
     };
 
     const [data, setData] = useState({
@@ -85,35 +93,35 @@ function listaProyectos() {
     var lastcontainer = '';
 
     const updateEstatusTicket = async (idticket, estatus) => {
-        
+
         if (lastcontainer == estatus) {
             return;
         }
         let st = '';
         switch (estatus) {
             case 'Por hacer':
-                
+
                 st = 'todo';
                 break;
             case 'Haciendo':
-                
-                st ='doing'
+
+                st = 'doing'
                 break;
             case 'En revisión':
-                
+
                 st = 'check';
                 break;
             case 'Hecho':
-                
-                st ='done';
+
+                st = 'done';
                 break;
-        
+
             default:
                 alert('Algo salio mal');
                 break;
         }
-        
-        lastcontainer= estatus; // verifica el estatus si no es repetido
+
+        lastcontainer = estatus; // verifica el estatus si no es repetido
 
         try {
             const options = {
@@ -130,9 +138,9 @@ function listaProyectos() {
             }
 
             const datos = await fetch('http://localhost:3000/api/ticket/update', options);
-            
+
             if (datos.ok) {
-               //const datoss = await datos.json();
+                //const datoss = await datos.json();
                 console.log('estatus actualizado');
             }
 
@@ -150,7 +158,7 @@ function listaProyectos() {
         const sourceContainer = data.containers[result.source.droppableId];
         const destinationContainer = data.containers[result.destination.droppableId];
         const draggedItemId = result.draggableId;
-        
+
         // Obtén los objetos de los elementos arrastrados y soltados
         const draggedItem = data.items[draggedItemId];
         const sourceIndex = result.source.index;
@@ -170,7 +178,13 @@ function listaProyectos() {
     return (
         <>
             {
-                isOpen && (<Modal setIsOpen={setIsOpen} />)
+                isOpenTicket && (<Modal setIsOpen={setIsOpenTicket} />)
+            }
+            {
+                isOpenChat && (<Chat
+                    setIsOpenChat={setIsOpenChat}
+                    isOpenChat={isOpenChat}
+                />)
             }
             <NavBar />
             <div className='flex mt-8 pr-8'>
@@ -192,7 +206,7 @@ function listaProyectos() {
                                                 <h2 className="text-lg w-full text-center font-bold">{container.title}</h2>
                                                 <button
                                                     className='w-7 h-6 bg-gray-400 rounded-full text-xl font-bold flex items-center justify-center pb-1 mr-1 hover:bg-blue-700 hover:text-white'
-                                                    onClick={openModal}
+                                                    onClick={openModalTicket}
                                                 >
                                                     +
                                                 </button>
@@ -220,10 +234,10 @@ function listaProyectos() {
                                                                     {...provided.draggableProps}
                                                                     {...provided.dragHandleProps}
                                                                     className="bg-white p-2 rounded cursor-pointer shadow-md hover:shadow-xl"
-                                                                    onDoubleClick={() => alert(JSON.stringify(item))  }
+                                                                    onDoubleClick={() => alert(JSON.stringify(item))}
                                                                 >
                                                                     <p className='text-sm font-semibold text-center mb-2'>
-                                                                        Ticket #{index}
+                                                                        Ticket #{(index + 1)}
                                                                     </p>
                                                                     <p className='text-xs font-semibold mb-2'>
                                                                         {item.titulo}
@@ -257,6 +271,7 @@ function listaProyectos() {
                     </DragDropContext>
                 </div>
             </div>
+            <BotonFlotante openModalChat={openModalChat} />
         </>
     );
 }
